@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Retro Audio Player</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.2/p5.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.2/addons/p5.sound.min.js"></script>
+  <script src="sketch.js"></script>
+  <style>
+    body {
+      margin: 0;
+      background: linear-gradient(to bottom, #4B0082, #6A0DAD); /* 向下变浅的紫色渐变 */
+      color: #E6E6FA; /* 浅紫文字 */
+      font-family: 'Courier New', monospace; /* 复古字体 */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      filter: brightness(1.1) contrast(1.1); /* CRT 效果 */
+    }
+    #upper-controls {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      background: rgba(148, 0, 211, 0.7); /* 紫色半透面板 */
+      padding: 10px 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    }
+    #bottom-controls {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(148, 0, 211, 0.7); /* 紫色半透面板 */
+      padding: 10px 20px;
+      border-radius: 10px;
+      box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.5);
+    }
+    .slider-container {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    input[type="file"] {
+      padding: 8px;
+      background: #BA55D3; /* 紫色控件 */
+      color: #FFF;
+      border: none;
+      border-radius: 5px; /* 矩形形状 */
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    input[type="file"]:hover {
+      background: #DA70D6;
+    }
+    input:not([type="file"]), button {
+      padding: 8px;
+      background: #BA55D3; /* 紫色控件 */
+      color: #FFF;
+      border: none;
+      border-radius: 50%; /* 旋钮圆形样式 */
+      cursor: pointer;
+      transition: background 0.2s;
+      width: 40px; /* 旋钮大小 */
+      height: 40px;
+    }
+    input:not([type="file"]):hover, button:hover {
+      background: #DA70D6;
+    }
+    input[type="range"] {
+      width: 100px; /* 滑块宽度 */
+      accent-color: #EE82EE; /* 浅紫滑块 */
+      -webkit-appearance: none; /* 自定义样式 */
+      background: transparent;
+      cursor: pointer;
+    }
+    input[type="range"]::-webkit-slider-runnable-track {
+      background: #DA70D6; /* 紫色轨迹 */
+      height: 5px;
+      border-radius: 5px;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      background: #EE82EE; /* 浅紫填充 */
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      margin-top: -5px;
+    }
+    input[type="checkbox"] {
+      border-radius: 0; /* 方形开关 */
+      width: 20px;
+      height: 20px;
+    }
+    #progress-range {
+      width: 500px; /* 加长进度条 */
+      accent-color: #EE82EE; /* 浅紫填充 */
+    }
+    p {
+      margin: 0;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+  </style>
+</head>
+<body>
+  <div id="upper-controls">
+    <input type="file" id="fileInput" accept="audio/*">
+    <div class="slider-container">
+      <p>Speed: <span id="speedDisplay">1.0x</span></p>
+      <input type="range" id="speed" min="0.5" max="2" value="1" step="0.1">
+    </div>
+    <div class="slider-container">
+      <p>Volume: <span id="volumeDisplay">1.0</span></p>
+      <input type="range" id="volume" min="0" max="1" value="1" step="0.05">
+    </div>
+    <div class="slider-container">
+      <p>Lo-Fi: <input type="checkbox" id="lofi-enable" checked></p>
+    </div>
+    <div class="slider-container">
+      <p>Cutoff: <span id="lofi-cutoff-display">20000 Hz</span></p>
+      <input type="range" id="lofi-cutoff" min="20" max="20000" value="20000" step="10">
+    </div>
+    <div class="slider-container">
+      <p>Reso: <span id="lofi-reso-display">0.1 Q</span></p>
+      <input type="range" id="lofi-reso" min="0.001" max="10" value="0.1" step="0.001">
+    </div>
+  </div>
+  <div id="bottom-controls">
+    <button id="pause-play">▶️ Play</button>
+    <input type="range" id="progress" class="progress-range" min="0" max="1" value="0" step="0.001">
+    <p>Progress: <span id="progressDisplay">0:00 / 0:00</span></p>
+  </div>
+</body>
+</html>
