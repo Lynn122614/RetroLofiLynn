@@ -7,7 +7,7 @@ let lofiFilter;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  background(0); // 初始纯黑
+  // 移除 background()，让 HTML 背景显示
 
   amp = new p5.Amplitude(); // 幅度检测
   lofiFilter = new p5.LowPass(); // 低通滤波器
@@ -100,8 +100,6 @@ function setup() {
 }
 
 function draw() {
-  background(0, 50); // 半透黑色，增加动态感
-
   if (uploadedSound && uploadedSound.isLoaded() && isFilePlaying && !isPaused) {
     // 更新进度条
     let currentTime = uploadedSound.currentTime();
