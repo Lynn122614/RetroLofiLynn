@@ -111,6 +111,7 @@ input[type="range"]::-webkit-slider-thumb{
 }
 .progress-range{ width:520px; }
 
+/* p5 画布在极光之上（-1 > -2） */
 canvas{ position:absolute; inset:0; z-index:-1; }
 
 /* 播放按钮（老功放） */
@@ -209,4 +210,32 @@ canvas{ position:absolute; inset:0; z-index:-1; }
     bottom: 18px;
   }
   .progress-range{ width: 62vw; }
+}
+
+/* ===== Aurora Flow Background（更底层） ===== */
+#aurora-bg{
+  position: fixed; inset: 0; z-index: -2; /* 低于 canvas(-1)，高于 body 背景 */
+  pointer-events: none;
+  background:
+    radial-gradient(120% 80% at 10% 20%, rgba(255,184,92,.22), transparent 60%),
+    radial-gradient(90% 70% at 80% 0%, rgba(255,234,208,.12), transparent 60%),
+    radial-gradient(120% 90% at 70% 80%, rgba(154,72,255,.18), transparent 60%),
+    linear-gradient(to bottom, #4B0082 0%, #6A0DAD 100%);
+  filter: blur(22px) saturate(1.15);
+  animation: auroraShift 18s ease-in-out infinite alternate;
+  transform: translateZ(0);
+}
+@keyframes auroraShift{
+  0%   { filter: hue-rotate(0deg)   blur(22px) saturate(1.10); background-position: 0% 0%, 0% 0%, 0% 0%; }
+  50%  { filter: hue-rotate(-8deg)  blur(24px) saturate(1.20); background-position: 30% 10%, 10% 0%, 0% 20%; }
+  100% { filter: hue-rotate(6deg)   blur(26px) saturate(1.25); background-position: 60% 20%, 20% 0%, 0% 40%; }
+}
+/* 有电平时：由 sketch.js 的小挂钩注入 .has-level */
+body.has-level #aurora-bg{
+  animation-duration: 14s;
+  filter: hue-rotate(2deg) blur(24px) saturate(1.25) brightness(1.05);
+}
+/* 无障碍：减少动效 */
+@media (prefers-reduced-motion: reduce){
+  #aurora-bg{ animation-duration: 40s; }
 }

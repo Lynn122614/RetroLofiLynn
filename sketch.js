@@ -108,7 +108,7 @@ function setup() {
     select('#volumeDisplay').html(v.toFixed(1));
   });
 
-  // Lo-Fi 开关/参数（拨杆仍是 checkbox，所以事件不变）
+  // Lo-Fi 开关/参数
   select('#lofi-enable').changed(() => {
     if (uploadedSound && uploadedSound.isLoaded()) {
       if (select('#lofi-enable').elt.checked) {
@@ -249,13 +249,16 @@ function draw() {
 
   drawVinylAndNeon(displayLevel);
   drawRipples();
+
+  /* ===== 小挂钩：根据电平给 <body> 加类，驱动极光提亮/加速 ===== */
+  document.body.classList.toggle('has-level', (displayLevel || 0) > 0.02);
 }
 
 /* ------------------- 黑胶 + 克制光环 ------------------- */
 function drawVinylAndNeon(level){
   const cx = width/2, cy = height/2;
 
-  // 基准 + 小幅呼吸（保留你当前基准比例 0.12）
+  // 基准 + 小幅呼吸（保留当前基准比例 0.12）
   const base = lerp(DISC_R_MIN, DISC_R_MAX, 0.12);
   const pulsePct = 0.18;
   const pulse = (DISC_R_MAX - DISC_R_MIN) * pulsePct;

@@ -10,6 +10,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/addons/p5.sound.min.js"></script>
 </head>
 <body>
+  <!-- 极光背景：永远在最底层（z:-2），位于 body 渐变之上、canvas 之下 -->
+  <div id="aurora-bg" aria-hidden="true"></div>
 
   <!-- 折叠面板：遮罩 -->
   <div id="drawer-backdrop" class="drawer-backdrop" aria-hidden="true"></div>
